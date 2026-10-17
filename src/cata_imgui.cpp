@@ -712,6 +712,21 @@ bool cataimgui::client::any_window_shown()
 bool cataimgui::client::want_capture_mouse()
 {
     bool want = ImGui::GetCurrentContext() != nullptr && ImGui::GetIO().WantCaptureMouse;
+    static bool prev_want = false;
+    if( want != prev_want ) {
+        prev_want = want;
+        ImGuiContext *ctx = ImGui::GetCurrentContext();
+        ImGuiWindow *hov = ctx ? ctx->HoveredWindow : nullptr;
+        fprintf( stderr, "[DIAG] WANT TRANS to=%d frame=%d hovered=%s\n", want ? 1 : 0,
+                 ImGui::GetFrameCount(), hov ? hov->Name : "null" );
+        if( want && ctx ) {
+            for( ImGuiWindow *w : ctx->Windows ) {
+                fprintf( stderr, "[DIAG]   win '%s' visible=%d wasactive=%d hidden=%d\n",
+                         w->Name, w->LastFrameActive, static_cast<int>( w->WasActive ),
+                         static_cast<int>( w->Hidden ) );
+            }
+        }
+    }
     if( want ) {
         static int diag_frame = -100;
         int frame = ImGui::GetFrameCount();

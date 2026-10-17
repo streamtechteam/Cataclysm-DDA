@@ -6387,9 +6387,10 @@ static void CheckMessages()
                 }
 #endif
                 case CATA_MOUSEMOTION:
-                    fprintf( stderr, "[DIAG] sdl MOTION enable=%d wantcap=%d hideopt=%s\n",
+                    fprintf( stderr, "[DIAG] sdl MOTION enable=%d wantcap=%d framecnt=%d hideopt=%s\n",
                              static_cast<int>( mouse.enabled ),
                              static_cast<int>( cataimgui::client::want_capture_mouse() ),
+                             ImGui::GetCurrentContext() ? ImGui::GetFrameCount() : -1,
                              get_option<std::string>( "HIDE_CURSOR" ).c_str() );
                     if( ! mouse.enabled ) {
                         break;
