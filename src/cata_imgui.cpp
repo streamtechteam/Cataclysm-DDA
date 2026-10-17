@@ -711,7 +711,28 @@ bool cataimgui::client::any_window_shown()
 
 bool cataimgui::client::want_capture_mouse()
 {
-    return ImGui::GetCurrentContext() != nullptr && ImGui::GetIO().WantCaptureMouse;
+    bool want = ImGui::GetCurrentContext() != nullptr && ImGui::GetIO().WantCaptureMouse;
+    if( want ) {
+        static int diag_frame = -100;
+        int frame = ImGui::GetFrameCount();
+        if( frame - diag_frame >= 15 ) {
+            diag_frame = frame;
+            ImGuiContext *ctx = ImGui::GetCurrentContext();
+            ImGuiWindow *hov = ctx ? ctx->HoveredWindow : nullptr;
+            if( hov ) {
+                fprintf( stderr,
+                         "[DIAG] wantcap=1 frame=%d hovered='%s' pos=(%.0f,%.0f) size=(%.0f,%.0f) hidden=%d skipitems=%d\n",
+                         frame, hov ? hov->Name : "<null>", hov ? hov->Pos.x : -1.0,
+                         hov ? hov->Pos.y : -1.0, hov ? hov->Size.x : -1.0,
+                         hov ? hov->Size.y : -1.0, hov ? static_cast<int>( hov->Hidden ) : -1,
+                         hov ? static_cast<int>( hov->SkipItems ) : -1 );
+            } else {
+                fprintf( stderr, "[DIAG] wantcap=1 frame=%d hovered=null windows=%d\n",
+                         frame, 0 );
+            }
+        }
+    }
+    return want;
 }
 
 bool cataimgui::client::want_capture_keyboard()
