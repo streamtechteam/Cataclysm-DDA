@@ -890,6 +890,7 @@ shared_ptr_fast<uilist_impl> uilist::create_or_get_ui()
 
 shared_ptr_fast<uilist_impl> uilist::query( bool loop, int timeout, bool allow_unfiltered_hotkeys )
 {
+    fprintf( stderr, "[DIAG] uilist query start '%s'\n", title.c_str() );
     input_context ctxt = create_main_input_context();
 
 #if defined(__ANDROID__)
@@ -908,6 +909,7 @@ shared_ptr_fast<uilist_impl> uilist::query( bool loop, int timeout, bool allow_u
         ui_manager::redraw();
         query_once( ctxt, timeout, allow_unfiltered_hotkeys );
     } while( loop && ret == UILIST_WAIT_INPUT );
+    fprintf( stderr, "[DIAG] uilist query end '%s' ret=%d\n", title.c_str(), ret );
     return ui;
 }
 

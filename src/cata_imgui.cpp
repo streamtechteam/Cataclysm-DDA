@@ -1007,10 +1007,12 @@ cataimgui::window::window( const std::string &id_, int window_flags ) : window( 
     p_impl = std::make_unique<cataimgui::window_impl>( this );
     id = id_ + "##" + std::to_string( uint64_t( this ) );
     is_open = true;
+    fprintf( stderr, "[DIAG] WIN CTOR %s this=%p\n", id.c_str(), ( void * )this );
 }
 
 cataimgui::window::~window()
 {
+    fprintf( stderr, "[DIAG] WIN DTOR %s this=%p\n", id.c_str(), ( void * )this );
     p_impl.reset();
     if( GImGui ) {
         ImGui::ClearWindowSettings( id.c_str() );
