@@ -493,6 +493,16 @@ void ui_adaptor::redraw_invalidated( )
             }
             std::optional<point> cursor_pos;
             auto top_ui = std::prev( ui_stack_orig->end() );
+            {
+                static int diag_count = 0;
+                if( diag_count++ % 60 == 0 ) {
+                    int idx = 0;
+                    for( auto it = first_enabled; it != ui_stack_orig->end(); ++it, ++idx ) {
+                        fprintf( stderr, "[DIAG] stack[%d] is_imgui=%d\n", idx,
+                                 static_cast<int>( it->get().is_imgui ) );
+                    }
+                }
+            }
             for( auto it = first_enabled; !restart_redrawing && it != ui_stack_orig->end(); ++it ) {
                 ui_adaptor &ui = *it;
                 ui.is_on_top = it == top_ui;

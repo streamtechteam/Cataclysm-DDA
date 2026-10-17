@@ -957,6 +957,7 @@ void worldfactory::show_active_world_mods( const std::vector<mod_id> &world_mods
     } );
 
     while( true ) {
+        fprintf( stderr, "[DIAG] worldmods loop\n" );
         ui_manager::redraw();
 
         const std::string action = ctxt.handle_input();

@@ -521,6 +521,9 @@ const std::string &input_context::handle_input( const int timeout )
         coordinate = next_action.mouse_pos;
 
         if( action != CATA_ERROR ) {
+            if( action != "MOUSE_MOVE" ) {
+                fprintf( stderr, "[DIAG] ctx action=%s\n", action.c_str() );
+            }
             result = &action;
             break;
         }
