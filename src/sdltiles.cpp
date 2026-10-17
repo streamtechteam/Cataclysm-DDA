@@ -6387,6 +6387,10 @@ static void CheckMessages()
                 }
 #endif
                 case CATA_MOUSEMOTION:
+                    fprintf( stderr, "[DIAG] sdl MOTION enable=%d wantcap=%d hideopt=%s\n",
+                             static_cast<int>( mouse.enabled ),
+                             static_cast<int>( cataimgui::client::want_capture_mouse() ),
+                             get_option<std::string>( "HIDE_CURSOR" ).c_str() );
                     if( ! mouse.enabled ) {
                         break;
                     }
@@ -6407,6 +6411,9 @@ static void CheckMessages()
                     break;
 
                 case CATA_MOUSEBUTTONDOWN:
+                    fprintf( stderr, "[DIAG] sdl BTN_DOWN wantcap=%d btn=%d\n",
+                             static_cast<int>( cataimgui::client::want_capture_mouse() ),
+                             static_cast<int>( ev.button.button ) );
                     if( ! mouse.enabled ) {
                         break;
                     }
@@ -6430,6 +6437,9 @@ static void CheckMessages()
                     break;
 
                 case CATA_MOUSEBUTTONUP:
+                    fprintf( stderr, "[DIAG] sdl BTN_UP wantcap=%d btn=%d\n",
+                             static_cast<int>( cataimgui::client::want_capture_mouse() ),
+                             static_cast<int>( ev.button.button ) );
                     if( ! mouse.enabled ) {
                         break;
                     }

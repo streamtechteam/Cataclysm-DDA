@@ -507,6 +507,12 @@ const std::string &input_context::handle_input( const int timeout )
             break;
         }
 
+        if( next_action.type == input_event_t::mouse ) {
+            fprintf( stderr, "[DIAG] ctx mouse action=%s type=%d pos=(%d,%d)\n",
+                     action.c_str(), static_cast<int>( next_action.type ),
+                     next_action.mouse_pos.x, next_action.mouse_pos.y );
+        }
+
         if( next_action.type == input_event_t::mouse
             && !handling_coordinate_input && action == CATA_ERROR ) {
             continue; // Ignore mouse movement.
