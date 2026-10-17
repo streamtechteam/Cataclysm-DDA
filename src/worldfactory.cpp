@@ -973,10 +973,24 @@ void worldfactory::show_active_world_mods( const std::vector<mod_id> &world_mods
             }
         }
 
+        if( action == "SELECT" ) {
+            std::optional<point> coord = ctxt.get_coordinates_text( w_mods );
+            const bool hit_entry = coord.has_value() && !world_mods.empty() &&
+                                   run_for_point_in<int, point>( ent_map, *coord,
+            [&cursor]( const std::pair<int, inclusive_rectangle<point>> &p ) {
+                cursor = p.first;
+            } ) > 0;
+            if( !hit_entry ) {
+                // Clicked outside the list or nothing to select: dismiss, like CONFIRM.
+                break;
+            }
+            // Clicking an entry just selects it and keeps the dialog open.
+        }
+
         if( navigate_ui_list( action, cursor, scroll_rate, recmax, true ) ) {
             recalc_start = true;
         } else if( action == "QUIT" || action == "CONFIRM" ||
-                   action == "SELECT" || action == "SEC_SELECT" ) {
+                   action == "SEC_SELECT" ) {
             break;
         }
     }
