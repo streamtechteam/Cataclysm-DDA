@@ -721,11 +721,26 @@ bool cataimgui::client::want_capture_mouse()
             ImGuiWindow *hov = ctx ? ctx->HoveredWindow : nullptr;
             if( hov ) {
                 fprintf( stderr,
-                         "[DIAG] wantcap=1 frame=%d hovered='%s' pos=(%.0f,%.0f) size=(%.0f,%.0f) hidden=%d skipitems=%d\n",
+                         "[DIAG] wantcap=1 frame=%d hovered='%s' pos=(%.0f,%.0f) size=(%.0f,%.0f) hidden=%d skipitems=%d active=%d\n",
                          frame, hov ? hov->Name : "<null>", hov ? hov->Pos.x : -1.0,
                          hov ? hov->Pos.y : -1.0, hov ? hov->Size.x : -1.0,
                          hov ? hov->Size.y : -1.0, hov ? static_cast<int>( hov->Hidden ) : -1,
-                         hov ? static_cast<int>( hov->SkipItems ) : -1 );
+                         hov ? static_cast<int>( hov->SkipItems ) : -1,
+                         hov ? static_cast<int>( hov->Active ) : -1 );
+                ImGuiContext *ctx2 = ImGui::GetCurrentContext();
+                if( ctx2 ) {
+                    int n = 0;
+                    for( ImGuiWindow *w : ctx2->Windows ) {
+                        if( n++ > 24 ) {
+                            break;
+                        }
+                        fprintf( stderr,
+                                 "[DIAG]   win[%d] '%s' lastframe_visible=%d wasactive=%d hidden=%d skip=%d pos=(%.0f,%.0f)\n",
+                                 n, w->Name, w->LastFrameActive, static_cast<int>( w->WasActive ),
+                                 static_cast<int>( w->Hidden ), static_cast<int>( w->SkipItems ),
+                                 w->Pos.x, w->Pos.y );
+                    }
+                }
             } else {
                 fprintf( stderr, "[DIAG] wantcap=1 frame=%d hovered=null windows=%d\n",
                          frame, 0 );
